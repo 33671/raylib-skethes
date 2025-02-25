@@ -1,24 +1,22 @@
-
 #include <raylib.h>
 #include <raymath.h>
 #include <math.h>
 #include <stdlib.h>
-#include <stdio.h>
 #include <stdbool.h>
-#include <stddef.h> // For size_t
-#define MAX_CIRCLES 50000
-#define EPSILON1 1.0f
-#define PI 3.14159265358979323846f
+
+#define MAX_CIRCLES 100000
+#define EPSILON1 .1f
+// #define PI 3.14159265358979323846
 
 typedef struct {
-    float real;
-    float imag;
+    double real;
+    double imag;
 } Complex;
 
 typedef struct {
     Vector2 center;
-    float bend;
-    float radius;
+    double bend;
+    double radius;
     Color color;
 } Circle;
 
@@ -44,16 +42,16 @@ Complex complex_mul(Complex a, Complex b) {
     };
 }
 
-Complex complex_scale(Complex a, float s) {
+Complex complex_scale(Complex a, double s) {
     return (Complex){a.real * s, a.imag * s};
 }
 
-Complex complex_div(Complex a, float s) {
+Complex complex_div(Complex a, double s) {
     return (Complex){a.real / s, a.imag / s};
 }
 
-float complex_abs(Complex a) {
-    return sqrtf(a.real * a.real + a.imag * a.imag);
+double complex_abs(Complex a) {
+    return sqrt(a.real * a.real + a.imag * a.imag);
 }
 
 Complex complex_conj(Complex a) {
@@ -61,31 +59,31 @@ Complex complex_conj(Complex a) {
 }
 
 Complex complex_sqrt(Complex a) {
-    float r = sqrtf(complex_abs(a));
-    float theta = atan2f(a.imag, a.real) / 2;
-    return (Complex){r * cosf(theta), r * sinf(theta)};
+    double r = sqrt(complex_abs(a));
+    double theta = atan2(a.imag, a.real) / 2;
+    return (Complex){r * cos(theta), r * sin(theta)};
 }
 
 // Circle operations
-Circle create_circle(Complex center, float bend, Color color) {
+Circle create_circle(Complex center, double bend, Color color) {
     Circle c;
     c.center = (Vector2){center.real, center.imag};
     c.bend = bend;
-    c.radius = fabsf(1.0f / bend);
+    c.radius = fabs(1.0 / bend);
     c.color = color;
     return c;
 }
 
-float circle_distance(Circle a, Circle b) {
+double circle_distance(Circle a, Circle b) {
     return Vector2Distance(a.center, b.center);
 }
 
 
 // 判断两个圆是否相切
 bool isTangent(const Circle* c1, const Circle* c2) {
-    float d = circle_distance(*c1, *c2);
-    float r1 = c1->radius;
-    float r2 = c2->radius;
+    double d = circle_distance(*c1, *c2);
+    double r1 = c1->radius;
+    double r2 = c2->radius;
     bool a = fabs(d - (r1 + r2)) < EPSILON1;
     bool b = fabs(d - fabs(r2 - r1)) < EPSILON1;
     return a || b;
@@ -117,14 +115,15 @@ bool validate(const Circle* c4, const Circle* c1, const Circle* c2, const Circle
 
     return true;
 }
+
 // Descartes' Theorem implementation
-void descartes(Circle c1, Circle c2, Circle c3, float* k4) {
-    float k1 = c1.bend;
-    float k2 = c2.bend;
-    float k3 = c3.bend;
+void descartes(Circle c1, Circle c2, Circle c3, double* k4) {
+    double k1 = c1.bend;
+    double k2 = c2.bend;
+    double k3 = c3.bend;
     
-    float sum = k1 + k2 + k3;
-    float product = sqrtf(fabsf(k1*k2 + k2*k3 + k1*k3));
+    double sum = k1 + k2 + k3;
+    double product = sqrt(fabs(k1*k2 + k2*k3 + k1*k3));
     
     k4[0] = sum + 2 * product;
     k4[1] = sum - 2 * product;
@@ -136,9 +135,9 @@ void generate_circles(Circle c1, Circle c2, Circle c3, Circle* new_circles, int*
     Complex z2 = {c2.center.x, c2.center.y};
     Complex z3 = {c3.center.x, c3.center.y};
     
-    float k1 = c1.bend;
-    float k2 = c2.bend;
-    float k3 = c3.bend;
+    double k1 = c1.bend;
+    double k2 = c2.bend;
+    double k3 = c3.bend;
     
     Complex zk1 = complex_scale(z1, k1);
     Complex zk2 = complex_scale(z2, k2);
@@ -153,7 +152,7 @@ void generate_circles(Circle c1, Circle c2, Circle c3, Circle* new_circles, int*
     ));
     root = complex_scale(root, 2);
     
-    float k4[2];
+    double k4[2];
     descartes(c1, c2, c3, k4);
     
     *count = 0;
@@ -175,17 +174,17 @@ int is_valid(Circle new_c, Circle* circles, int circle_count) {
     if (new_c.radius < 2) return 0;
     
     for (int i = 0; i < circle_count; i++) {
-        float d = circle_distance(new_c, circles[i]);
-        float r_sum = new_c.radius + circles[i].radius;
-        float r_diff = fabsf(new_c.radius - circles[i].radius);
+        double d = circle_distance(new_c, circles[i]);
+        double r_sum = new_c.radius + circles[i].radius;
+        double r_diff = fabs(new_c.radius - circles[i].radius);
         
-        if (fabsf(d - r_sum) > EPSILON1 && fabsf(d - r_diff) > EPSILON1)
+        if (fabs(d - r_sum) > EPSILON1 && fabs(d - r_diff) > EPSILON1)
             return 0;
     }
     return 1;
 }
 
-int main(void) {
+int main2(void) {
     const int screenWidth = 600;
     const int screenHeight = 600;
     
@@ -196,13 +195,13 @@ int main(void) {
     int circle_count = 0;
     
     // Initialize first three circles
-    Circle c1 = create_circle((Complex){screenWidth/2, screenHeight/2}, -1.0f/(screenHeight/2), RED);
+    Circle c1 = create_circle((Complex){screenWidth/2, screenHeight/2}, -1.0/(screenHeight/2), RED);
     circles[circle_count++] = c1;
     
-    Circle c2 = create_circle((Complex){150, 300}, 1.0f/150.0, GREEN);
+    Circle c2 = create_circle((Complex){150, 300}, 1.0/150.0, GREEN);
     circles[circle_count++] = c2;
     
-    Circle c3 = create_circle((Complex){450, 300}, 1.0f/150.0, YELLOW);
+    Circle c3 = create_circle((Complex){450, 300}, 1.0/150.0, YELLOW);
     circles[circle_count++] = c3;
     
     Triplet queue[1000];

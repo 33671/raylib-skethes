@@ -16,6 +16,12 @@ int main1(void) {
     // Seed the random number generator
     SetRandomSeed(time(NULL));
 
+    // SetConfigFlags()
+    // SetTargetFPS(int fps)
+    // set windows flag here:
+    // SetTargetFPS(30);
+    SetConfigFlags(FLAG_WINDOW_HIGHDPI | FLAG_VSYNC_HINT | FLAG_MSAA_4X_HINT);   
+
     // Define bounds with a margin from the screen edges
     float x_min = 50.0f;
     float x_max = SCREEN_WIDTH - 50.0f;
