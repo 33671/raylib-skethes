@@ -47,7 +47,7 @@ void RebuildTree();
 int CompareX(const void* a, const void* b);
 int CompareY(const void* a, const void* b);
 
-int main() {
+int main4() {
     InitWindow(800, 700, "2D KD-Tree Visualization with Raylib");
     SetTargetFPS(60);
     float prevInterpolation = interpolation; // Track previous value
@@ -94,9 +94,9 @@ int main() {
         }
 
         // Draw points
-        for (int i = 0; i < pointCount; i++) {
-            DrawCircleV(points[i], 4, BLACK);
-        }
+        // for (int i = 0; i < pointCount; i++) {
+        //     DrawCircleV(points[i], 4, BLACK);
+        // }
 
         // GUI controls
         GuiSliderBar((Rectangle){ 250, 620, 120, 20 }, "Interpolation", TextFormat("%.2f", interpolation), &interpolation, 0.0f, 1.0f);
