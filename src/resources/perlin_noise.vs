@@ -1,16 +1,15 @@
 #version 330 core
 
-layout(location = 0) in vec3 vertexPosition;
+layout (location = 0) in vec2 position;
+layout (location = 1) in vec2 texcoord;
+uniform vec2 iResolution;
 
-out vec2 fragCoord;
+out vec2 TexCoord;
 
-void main() {
-    // 正确传递屏幕坐标到片段着色器
-    fragCoord = vertexPosition.xy;
-    // 修正坐标系统转换（Raylib使用左上角坐标系）
-    gl_Position = vec4(
-        (vertexPosition.x/400.0 - 1.0),    // 800px -> [-1,1]
-        (1.0 - vertexPosition.y/300.0),   // 600px -> [-1,1]
-        0.0, 1.0
-    );
+void main()
+{
+    vec2 ndc = (position / iResolution) * 2.0 - 1.0;    // Map x,y from [0, width/height] to [-1, 1]
+    ndc.y = -ndc.y;                                     // Flip y-axis (screen y-down to NDC y-up)
+    gl_Position = vec4(ndc, 0.0, 1.0);                  // Set position in clip space
+    TexCoord = texcoord;                                // Pass texture coordinates (0 to 1)
 }
