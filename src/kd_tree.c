@@ -3,6 +3,7 @@
 #define RAYGUI_IMPLEMENTATION
 #include "raygui.h"
 #include <stdlib.h>
+#include <stddef.h>
 
 #define MAX_POINTS 1000
 #define CANVAS_SIZE 600

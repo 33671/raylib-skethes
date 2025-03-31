@@ -68,7 +68,7 @@ void main() {
     // For static terrain, use: float height = snoise(vec3(uv, 0.0));
 
     // Map noise range [-1,1] to [0,1]
-    height = (height + 1.0) / 2.0;
+    height = (height + 1) / 1.0;
 
     // Assign colors based on height
     vec3 color;
@@ -81,7 +81,7 @@ void main() {
     } else if (height < 0.82) {
         color = vec3(0.988, 0.929, 0.949); 
     } else {
-        color = vec3(0.753, 0.584, 0.894); 
+        color = vec3(0.1137, 0.6902, 0.3922); 
     }
 
     // Output final color
