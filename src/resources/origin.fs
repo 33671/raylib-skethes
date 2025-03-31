@@ -5,8 +5,8 @@ in vec2 fragTexCoord;
 in vec4 fragColor;
 
 // Input uniform values
-uniform sampler2D texture0;
-uniform vec4 colDiffuse;
+uniform sampler2D inputTexture;
+// uniform vec4 colDiffuse;
 
 // Output fragment color
 out vec4 finalColor;
@@ -19,7 +19,7 @@ const float renderHeight = 600.0;
 
 float stitchingSize = 6.0;
 
-uniform int invert = 0;
+int invert = 0;
 
 vec4 PostFX(sampler2D tex, vec2 uv)
 {
@@ -53,7 +53,8 @@ vec4 PostFX(sampler2D tex, vec2 uv)
 
 void main()
 {
-    vec3 tc = PostFX(texture0, fragTexCoord).rgb;
+    vec3 tc = PostFX(inputTexture, fragTexCoord).rgb;
 
     finalColor = vec4(tc, 1.0);
+    // finalColor = texture(texture1, fragTexCoord) ;
 }

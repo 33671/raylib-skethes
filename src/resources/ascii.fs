@@ -1,6 +1,9 @@
-#version 330 core
+#version 330 
 uniform vec2 iResolution;
 uniform sampler2D inputTexture;
+in vec2 fragTexCoord;
+in vec4 fragColor;
+out vec4 finalColor;
 float character(int n, vec2 p)
 {
 	p = floor(p*vec2(-4.0, 4.0) + 2.5);
@@ -35,8 +38,9 @@ void main()
     
 	vec2 p = mod(pix/4.0, 2.0) - vec2(1.0);
     
-	// if (iMouse.z > 0.5)	col = vec3(character(n, p));
+	// if (iMouse.z > 0.5)	;
 	col = col*character(n, p);
+	// col = vec3(character(n, p));
 	
-	gl_FragColor = vec4(col, 1.0);
+	finalColor = vec4(col, 1.0);
 }
