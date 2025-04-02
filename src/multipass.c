@@ -1,10 +1,10 @@
 #include "raylib.h"
 
-int main() {
+int mainwtge4() {
     const int screenWidth = 800;
     const int screenHeight = 600;
 
-    InitWindow(screenWidth, screenHeight, "Dynamic perlin noise");
+    InitWindow(screenWidth, screenHeight, "Multipass shader");
     SetTargetFPS(60);
 
     // Shader shader = LoadShader("resources/perlin_noise.vs", "resources/perlin_noise.fs");
@@ -25,12 +25,6 @@ int main() {
         time = GetTime();
         SetShaderValue(shader, timeLoc, &time, SHADER_UNIFORM_FLOAT);
 
-        // BeginDrawing();
-        //     ClearBackground(BLACK);
-        //     // BeginShaderMode(shader);
-        //        DrawRectangleGradientV(0, 0, screenWidth,screenHeight, RED, GREEN);
-        //     // EndShaderMode();
-        // EndDrawing();
         BeginTextureMode(target_texture);
             ClearBackground(RAYWHITE);
 
