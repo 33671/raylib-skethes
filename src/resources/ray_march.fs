@@ -99,7 +99,8 @@ vec3 shading(vec3 hit_point, vec3 nom, vec3 rd) {
 }
 vec3 background(vec3 rd) {
     float t = 0.5*(rd.y + 1.0);
-    return mix(vec3(1.0), vec3(0.5, 0.7, 1.0), t);
+    // return mix(vec3(1.0), vec3(0.5, 0.7, 1.0), t);
+    return vec3(0.0);
 }
 vec3 camera_rd(vec2 position_xy,vec3 right_nom,vec3 up_nom,vec3 forward)
 {
